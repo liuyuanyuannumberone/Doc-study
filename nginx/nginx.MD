@@ -60,7 +60,7 @@
 
 /usr/share/doc/nginx-1.14.2/COPYRIGHT                                 **日志目录**
 
-/usr/share/man/man8/nginx.8.gz                                         /var/log/nginx
+/usr/share/man/man8/nginx.8.gz                                        /var/log/nginx
 
 
 
@@ -78,8 +78,23 @@
 
 5、nginx  -V  查看nginx安装详情
 
- systemctl restart nginx.service   重启nginx
+ systemctl restart/start/stop nginx.service   重启nginx
 
  systemctl status nginx.service    查看服务状态
 
  systemctl reload nginx.service  重新读取配置文件，不用停止nginx服务
+
+  nginx -t  语法正确检测   -s   reload         、
+
+ nginx  -t -c /etc/nginx/nginc.conf     
+
+  nginx -s reload -c  /etc/nginx/nginx.conf
+
+
+
+ 6、ip a 查看网卡 ，网卡绑定的ip    ifconfig
+
+ 7、基于虚你主机 多域名配置   /etc/hosts ==>  ping lyy.com  
+
+ 8、
+
