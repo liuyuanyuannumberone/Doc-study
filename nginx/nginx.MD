@@ -96,5 +96,25 @@
 
  7、基于虚你主机 多域名配置   /etc/hosts ==>  ping lyy.com  
 
- 8、
+#### 三、安装node 
+
+cd /u01/install    
+
+wget -c https://nodejs.org/dist/v10.1.0/node-v10.1.0-linux-x64.tar.gz
+
+tar -xvf node-v10.1.0-linux-x64.tar.gz 
+
+mv node-v10.1.0-linux-x64 nodejs    rm -rf node-v10.1.0-linux-x64.tar.gz 
+
+sudo ln -s /u01/install/nodejs/bin/npm  /usr/local/bin/npm
+
+sudo ln -s /u01/install/nodejs/bin/node /usr/local/bin/node
+
+node -v    npm -v
+
+
+
+
+
+
 
