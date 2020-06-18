@@ -1,6 +1,6 @@
 
 CREATE TABLE `imc_course` (
-  `course_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',  
+  `course_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',
   `title` varchar(20) NOT NULL DEFAULT '' COMMENT '课程主标题',
   `title_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '课程副标题',
   `type_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '课程方向ID',
@@ -23,7 +23,7 @@ CREATE TABLE `imc_course` (
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8 COMMENT='课程主表';    #指定自增长值
 
 #int(2)：并不表示数据的大小最大为99，其最大的值和int表示的最大值一样，只是表示查询时显示的结果长度为2位。显示宽度。不满足补0；
-#CURRENT_TIMESTAMP 
+#CURRENT_TIMESTAMP
 /*
 DEFAULT CURRENT_TIMESTAMP
 表示当插入数据的时候，该字段默认值为当前时间
@@ -35,6 +35,23 @@ MySQL 获得当前时间戳函数：  select current_timestamp, current_timestamp();
 decimal(10,2)中“2”表示小数部分的位数，如果插入的值未指定小数部分或者小数部分不足两位则会自动补到2位小数，
 若插入的值小数部分超过了2为则会发生截断，截取前2位小数。
 */
+
+INSERT INTO `imc_course` VALUES
+(1,'MySQL课程-79889','通过学习MySQL课程-79889让你更有成就感!',4,8,1,'2019-01-18 23:47:33',3503,'00:00:00','','','',29,'',0.0,0.0,0.0,0.0),
+(2,'MySQL课程-69546','通过学习MySQL课程-69546让你更有成就感!',6,7,2,'2018-08-31 00:09:44',3921,'00:00:00','','','',26,'',0.0,0.0,0.0,0.0),
+(3,'PostgreSQL课程-43917','通过学习PostgreSQL课程-43917让你更有成就感!',1,8,4,'2018-01-26 09:24:18',6941,'00:00:00','','','',26,'',0.0,0.0,0.0,0.0),
+(4,'MySQL课程-88343','通过学习MySQL课程-88343让你更有成就感!',10,1,3,'2018-08-04 01:01:16',6252,'00:00:00','','','',27,'',0.0,0.0,0.0,0.0),
+(5,'PostgreSQL课程-42349','通过学习PostgreSQL课程-42349让你更有成就感!',6,1,1,'2018-12-11 22:07:05',5161,'00:00:00','','','',27,'',0.0,0.0,0.0,0.0),
+(6,'PostgreSQL课程-69538','通过学习PostgreSQL课程-69538让你更有成就感!',2,4,3,'2018-05-13 20:17:16',6393,'00:00:00','','','',26,'',0.0,0.0,0.0,0.0),
+(7,'MySQL课程-04097','通过学习MySQL课程-04097让你更有成就感!',5,5,2,'2018-09-09 20:04:28',5245,'00:00:00','','','',21,'',0.0,0.0,0.0,0.0),
+(8,'PostgreSQL课程-87282','通过学习PostgreSQL课程-87282让你更有成就感!',9,7,1,'2018-11-12 18:06:09',3486,'00:00:00','','','',26,'',0.0,0.0,0.0,0.0),
+(9,'PostgreSQL课程-03245','通过学习PostgreSQL课程-03245让你更有成就感!',3,1,2,'2018-07-07 02:59:46',8130,'00:00:00','','','',27,'',0.0,0.0,0.0,0.0),
+(10,'MySQL课程-84741','通过学习MySQL课程-84741让你更有成就感!',1,5,2,'2018-05-25 04:24:47',1334,'00:00:00','','','',23,'',0.0,0.0,0.0,0.0);
+
+
+
+
+
 
 
 
@@ -48,6 +65,19 @@ CREATE TABLE `imc_chapter` (
   PRIMARY KEY (`chapter_id`),
   UNIQUE KEY `udx_couseid` (`course_id`,`chapter_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1330 DEFAULT CHARSET=utf8 COMMENT='课程章节';
+
+
+INSERT INTO `imc_chapter` VALUES (1,1,'MySQL课程-79889第 1章','MySQL课程-79889第 1章详细介绍',01),
+(2,1,'MySQL课程-79889第 2章','MySQL课程-79889第 2章详细介绍',02),(3,1,'MySQL课程-79889第 3章','MySQL课程-79889第 3章详细介绍',03),
+(4,1,'MySQL课程-79889第 4章','MySQL课程-79889第 4章详细介绍',04),(5,1,'MySQL课程-79889第 5章','MySQL课程-79889第 5章详细介绍',05),
+(6,1,'MySQL课程-79889第 6章','MySQL课程-79889第 6章详细介绍',06),(7,1,'MySQL课程-79889第 7章','MySQL课程-79889第 7章详细介绍',07),
+(8,1,'MySQL课程-79889第 8章','MySQL课程-79889第 8章详细介绍',08),(9,1,'MySQL课程-79889第 9章','MySQL课程-79889第 9章详细介绍',09),
+(10,1,'MySQL课程-79889第 10章','MySQL课程-79889第 10章详细介绍',10);
+
+
+
+
+
 
 
 
@@ -65,6 +95,19 @@ CREATE TABLE `imc_subsection` (
   PRIMARY KEY (`sub_id`),
   UNIQUE KEY `udx_chapterid_courseid_subname` (`chapter_id`,`course_id`,`sub_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9834 DEFAULT CHARSET=utf8 COMMENT='课程小节表';
+
+
+
+INSERT INTO `imc_subsection` VALUES (1,1,1,'MySQL课程-79889第 1章第 1节','','mp4','35:32:00',01),
+(2,1,1,'MySQL课程-79889第 1章第 2节','','mp4','16:21:00',02),(3,1,1,'MySQL课程-79889第 1章第 3节','','mp4','39:52:00',03),
+(4,2,1,'MySQL课程-79889第 2章第 1节','','mp4','47:25:00',01),(5,2,1,'MySQL课程-79889第 2章第 2节','','mp4','27:20:00',02),
+(6,2,1,'MySQL课程-79889第 2章第 3节','','mp4','21:12:00',03),
+(7,2,1,'MySQL课程-79889第 2章第 4节','','mp4','40:20:00',04);
+
+
+
+
+
 
 
 
@@ -94,9 +137,10 @@ CREATE UNIQUE INDEX uqx_classname  ON  imc_class (class_name);
 
 -- 建立唯一索引后，执行INSERT INTO imc_class (class_name) VALUES ('MySQL');会报错
 -- 但是我们想让索引重复(主键重复的)的数据其他字段得到更新。
-   
+
 INSERT INTO imc_class (class_name) VALUES ('MySQL') ON DUPLICATE KEY UPDATE  add_time=CURRENT_TIME;
 --duplicate
+
 
 
 
@@ -113,6 +157,18 @@ CREATE TABLE `imc_type` (
 
 
 
+INSERT INTO `imc_type` VALUES (1,'前端开发','2019-01-24 08:59:51'),(2,'后端开发','2019-01-24 08:59:51'),
+(3,'移动开发','2019-01-24 08:59:51'),(4,'算法&数学','2019-01-24 08:59:51'),(5,'前沿技术','2019-01-24 08:59:51'),
+(6,'云计算&大数据','2019-01-24 08:59:51'),(7,'运维&测试','2019-01-24 08:59:51'),
+(8,'数据库','2019-01-24 08:59:51'),(9,'UI设计&多媒体','2019-01-24 08:59:51'),(10,'游戏','2019-01-24 08:59:51');
+
+
+
+
+
+
+
+
 
 CREATE TABLE `imc_level` (
   `level_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程难度ID',
@@ -120,6 +176,15 @@ CREATE TABLE `imc_level` (
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '填加时间',
   PRIMARY KEY (`level_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='课程方向表';
+
+
+
+
+INSERT INTO `imc_level` VALUES (1,'入门','2019-01-24 09:01:03'),(2,'初级','2019-01-24 09:01:03'),
+(3,'中级','2019-01-24 09:01:03'),(4,'高级','2019-01-24 09:01:03');
+
+
+
 
 
 
@@ -150,6 +215,23 @@ CREATE TABLE `imc_user` (
 
 
 
+INSERT INTO `imc_user` VALUES (1,'沿舟侨','7c345f726643d5a61753126d52b250d0','1','','','未知','',0,0,0,0,0,'2019-01-24 16:31:01',1),
+(2,'窦貌','35ce19fd941eb52fddfd48a50672810b','0','','','未知','',0,0,0,0,0,'2019-01-24 16:31:01',1),
+(3,'侯鹿焦','78826bc6694f82e5a6579af70e5d1a79','1','','','未知','',0,0,0,0,0,'2019-01-24 16:31:01',1),
+(4,'邹征末','e24db658b6e77741a515e43b9ed80c0a','0','','','未知','',0,0,0,0,0,'2019-01-24 16:31:01',1),
+(5,'项讽巡','93e42066280ff2f20ca759c9ede5bc31','1','','','未知','',0,0,0,0,0,'2019-01-24 16:31:01',1);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -169,6 +251,23 @@ CREATE TABLE `imc_question` (
   `add_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',
   PRIMARY KEY (`quest_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2321 DEFAULT CHARSET=utf8 COMMENT='问答评论表';
+
+
+
+
+INSERT INTO `imc_question` VALUES (1,2314,57,727,5321,0,'用户:2314关于 SQLServer课程-82618第 5章第 2节的问答',
+'用户:2314关于 SQLServer课程-82618第 5章第 2节的问答','问答',26,'2019-01-28 17:40:06'),
+(2,3014,76,984,7175,0,'用户:3014关于 SQLServer课程-00610第 1章第 2节的问答',
+'用户:3014关于 SQLServer课程-00610第 1章第 2节的问答','问答',89,'2019-01-28 17:40:06'),
+(3,3011,14,163,1204,0,'用户:3011关于 PostgreSQL课程-57259第 4章第 9节的评论',
+'用户:3011关于 PostgreSQL课程-57259第 4章第 9节的评论','评论',41,'2019-01-28 17:40:06');
+
+
+
+
+
+
+
 
 
 
@@ -196,7 +295,6 @@ CREATE TABLE `imc_note` (
 
 
 
-
 CREATE TABLE `imc_classvalue` (
   `value_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '评价ID',
   `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
@@ -208,6 +306,23 @@ CREATE TABLE `imc_classvalue` (
   `add_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',
   PRIMARY KEY (`value_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8 COMMENT='课程评价表';
+
+
+
+
+INSERT INTO `imc_classvalue` VALUES (1,3065,8,9.0,9.1,8.1,0.0,'2019-01-28 17:10:18'),
+(2,952,17,9.6,8.9,10.0,0.0,'2019-01-28 17:10:18'),
+(3,3539,59,9.7,8.1,8.1,0.0,'2019-01-28 17:10:18'),(4,2040,53,8.2,9.0,8.6,0.0,'2019-01-28 17:10:18'),
+(5,1003,36,8.5,8.8,9.9,0.0,'2019-01-28 17:10:18'),(6,1608,59,8.6,9.2,8.5,0.0,'2019-01-28 17:10:18'),
+(7,2374,98,9.2,9.1,8.8,0.0,'2019-01-28 17:10:18'),(8,2080,57,8.5,8.5,9.2,0.0,'2019-01-28 17:10:18'),
+(9,2053,14,9.4,9.8,9.0,0.0,'2019-01-28 17:10:18'),(10,2640,64,9.9,8.8,8.8,0.0,'2019-01-28 17:10:18');
+
+
+
+
+
+
+
 
 
 
@@ -224,12 +339,150 @@ CREATE TABLE `imc_selectcourse` (
 
 
 
------------------------------------------------- 插入------------------------------------------------
+INSERT INTO `imc_selectcourse` VALUES (1,1968,52,'2019-01-24 21:35:26','18:31:15'),(2,88,67,'2019-03-09 08:26:40','01:50:49'),
+(3,522,32,'2019-02-03 11:13:03','00:17:59'),(4,2666,6,'2019-01-02 02:30:47','03:17:17'),
+(5,3957,28,'2019-01-23 06:08:52','01:15:18'),(6,2498,54,'2019-02-27 00:47:06','18:15:08'),(7,1319,28,'2019-02-20 06:50:43','04:08:07'),
+(8,550,51,'2019-01-06 14:28:31','02:40:22'),(9,780,85,'2019-01-03 07:51:19','16:55:08'),(10,4093,60,'2019-01-31 09:11:12','16:14:31');
+
+
+
+-- ---------------------------------------------- SELECT------------------------------------------------
+
+SELECT 
+     [ALL|DISTINCT|DISTINCTROW]
+     select_expr
+     [FROM]
+     [WHERE]
+     [GROUP BY]
+     [HAVING]
+     [ORDER BY]
+     [LIMIT]
+     
+
+
+-- 下面是：比较运算符
 /*
-
-use数据库 ，确认插入的表，确认哪些列可以为NULL，不能为NULL的是否有默认值。
-
-
-
+=  <  >  >=  <=  <>和!= 都表示不等于; BETWEEN 1000 AND 2000 
+binary 区分大小写
+SELECT 'MYSQL' LIKE BINARY '_ysql'; 返回0
 
 */
+
+SELECT * FROM imc_class;
+SELECT class_id,class_name FROM imc_class;
+SELECT title FROM imc_course  WHERE title LIKE binary '%MYSQL%'; # 包含mysql的课程名   # NOT LIKE   %代表任意数量的字符， _代表一个字符
+SELECT title,study_cnt FROM imc_course  WHERE study_cnt >= 5161;
+SELECT title,study_cnt FROM imc_course  WHERE study_cnt>=1000 AND study_cnt<=2000 ;#[1000-2000]
+SELECT title,study_cnt FROM imc_course  WHERE study_cnt BETWEEN 1000 AND 2000 ;#[1000-2000]
+SELECT * FROM imc_course WHERE title IS NOT NULL;     # IS NULL
+SELECT title FROM imc_course WHERE course_id IN (1,3,5);  #列的值在指定范围内的数据  NOT IN
+
+
+/*
+
+-- 下面是：逻辑运算符 AND OR       && ||    XOR 一真一假返回真  2真2假返回假
+
+*/
+
+SELECT title,study_cnt FROM imc_course WHERE title LIKE '%mysql%' AND study_cnt>5000;
+SELECT title,study_cnt FROM imc_course WHERE title LIKE '%mysql%' OR study_cnt>5000;
+
+
+SELECT title,study_cnt FROM imc_course WHERE title LIKE '%mysql%' AND study_cnt<5000
+UNION ALL
+SELECT title,study_cnt FROM imc_course WHERE title NOT LIKE '%mysql%' AND study_cnt>5000; #联合查询 （将查询结果加起来）
+-- 和上边一样的功能，用XOR   A&B 和!A&!B 的时候可以用到，取A和!B
+SELECT title,study_cnt FROM imc_course WHERE title LIKE '%mysql%' XOR study_cnt>5000;
+
+
+任何运算符和NULL值运算结果都是NULL
+
+
+/*
+
+多个表中查询数据--关联查询
+
+JOIN
+INNER JOIN 内关联（A&&B）     select <select list>  from  tableA A INNER JOIN tableB B   ON A.key=B.key;  (两个表的集合)
+OUTER JOIN 外关联   LEFT  JOIN (左连接)  和  RIGHT JOIN（右连接） 
+*/
+-- 查询每一门课程的课程ID、课程名称和章节名称
+SELECT
+	a.course_id,
+	a.title,
+	b.chapter_name 
+FROM                                                   -- A&&B
+	imc_course a
+	JOIN imc_chapter b ON a.course_id = b.course_id;
+
+
+SELECT
+	a.course_id,
+	a.title,
+	b.chapter_name                                     --（A||A&&B）
+FROM
+	imc_course a
+LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id;
+
+
+SELECT
+	a.course_id,
+	a.title,
+	b.chapter_name                                    -- (A-A&&B) 
+FROM
+	imc_course a
+LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id WHERE b.KEY IS NULL;
+
+
+
+
+/*
+group by 将结果按照某些列分成不同的组，并对分组后的数据进行聚合操作
+select 后的非聚合函数的列要全部写在group by后边保持一致！！！！！！！！！！！
+
+where 是无法使用聚合函数，所以使用having，对聚合后的数据进行过滤
+
+*/
+
+
+SELECT
+	level_name,
+	count( * ) 
+FROM
+	imc_course a
+	JOIN imc_level b ON a.level_id = b.level_id 
+GROUP BY
+	level_name
+
+-- 入门  5
+-- 中级  4
+-- 高级  6
+
+
+SELECT
+	class_name,
+	level_name,
+	count( * ) 
+FROM
+	imc_course a
+	JOIN imc_class b ON b.class_id = a.class_id
+	JOIN imc_level c ON c.level_id = a.level_id          #把几个表连接起来
+GROUP BY
+	class_name,
+	level_name 
+HAVING
+	count( * ) >3
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ---------------------------------------------------SELECT----------------------------------------------
