@@ -348,7 +348,7 @@ INSERT INTO `imc_selectcourse` VALUES (1,1968,52,'2019-01-24 21:35:26','18:31:15
 
 -- ---------------------------------------------- SELECT------------------------------------------------
 
-SELECT 
+SELECT
      [ALL|DISTINCT|DISTINCTROW]
      select_expr
      [FROM]
@@ -357,12 +357,12 @@ SELECT
      [HAVING]
      [ORDER BY]
      [LIMIT]
-     
+
 
 
 -- 下面是：比较运算符
 /*
-=  <  >  >=  <=  <>和!= 都表示不等于; BETWEEN 1000 AND 2000 
+=  <  >  >=  <=  <>和!= 都表示不等于; BETWEEN 1000 AND 2000
 binary 区分大小写
 SELECT 'MYSQL' LIKE BINARY '_ysql'; 返回0
 
@@ -404,13 +404,13 @@ SELECT title,study_cnt FROM imc_course WHERE title LIKE '%mysql%' XOR study_cnt>
 
 JOIN
 INNER JOIN 内关联（A&&B）     select <select list>  from  tableA A INNER JOIN tableB B   ON A.key=B.key;  (两个表的集合)
-OUTER JOIN 外关联   LEFT  JOIN (左连接)  和  RIGHT JOIN（右连接） 
+OUTER JOIN 外关联   LEFT  JOIN (左连接)  和  RIGHT JOIN（右连接）
 */
 -- 查询每一门课程的课程ID、课程名称和章节名称
 SELECT
 	a.course_id,
 	a.title,
-	b.chapter_name 
+	b.chapter_name
 FROM                                                   -- A&&B
 	imc_course a
 	JOIN imc_chapter b ON a.course_id = b.course_id;
@@ -428,7 +428,7 @@ LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id;
 SELECT
 	a.course_id,
 	a.title,
-	b.chapter_name                                    -- (A-A&&B) 
+	b.chapter_name                                    -- (A-A&&B)
 FROM
 	imc_course a
 LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id WHERE b.KEY IS NULL;
@@ -438,19 +438,37 @@ LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id WHERE b.KEY IS NULL;
 
 /*
 group by 将结果按照某些列分成不同的组，并对分组后的数据进行聚合操作
-select 后的非聚合函数的列要全部写在group by后边保持一致！！！！！！！！！！！
 
-where 是无法使用聚合函数，所以使用having，对聚合后的数据进行过滤
+where 是无法使用聚合函数，所以使用having，对聚合后的数据进行过滤。
+
+-- 总结：1、数值可以作为查询列(select 5 from imc_class);
+	       2、一个返回一列，一个返回在一个值，必须使用group by ==列和聚合函数使用，必须使用group by;
+	       3、select   列某+聚合函数  group by 列某  （列某=列某）
+
+常用的聚合函数:聚合函数也可以单独使用
+
+1、count(*)(col) 计算符合条件的数据行数
+2、sum(col_name) 计算符合条件的数值列的和
+3、avg(col_name) 计算符合条件的数值列的和的平均值
+4、max(col_name) 计算列的最大值  min(col_name)
+
+
+SELECT COUNT(*) FROM imc_course; #10行
+SELECT COUNT(DISTINCT user_id) FROM imc_course; # 去重
+
+SELECT SUM(study_cnt) FROM  imc_course;
+
+
 
 */
 
 
 SELECT
 	level_name,
-	count( * ) 
+	count( * )
 FROM
 	imc_course a
-	JOIN imc_level b ON a.level_id = b.level_id 
+	JOIN imc_level b ON a.level_id = b.level_id
 GROUP BY
 	level_name
 
@@ -462,18 +480,135 @@ GROUP BY
 SELECT
 	class_name,
 	level_name,
-	count( * ) 
+	count( * )
 FROM
 	imc_course a
 	JOIN imc_class b ON b.class_id = a.class_id
 	JOIN imc_level c ON c.level_id = a.level_id          #把几个表连接起来
 GROUP BY
 	class_name,
-	level_name 
+	level_name
 HAVING
 	count( * ) >3
 
 
+	#参考1                                                                   #参考2
+SELECT                                                                 SELECT
+	course_id,                   #返回一列                                        course_id,
+	AVG( content_score ) AS avg_content,  #返回一个值                               (SELECT AVG(content_score) FROM  imc_classvalue)  #数值
+	AVG( level_score ) AS avg_level,               <= 区分 =>              FROM
+	AVG( logic_score ) AS avg_logic                                       imc_classvalue
+FROM
+	imc_classvalue
+GROUP BY
+	course_id;
+
+
+#参考3
+
+SELECT
+	(SELECT AVG(content_score) FROM  imc_classvalue )  #数值
+FROM
+	imc_classvalue
+
+
+
+ #参考四
+
+SELECT
+	title,( SELECT MAX( study_cnt ) FROM imc_course ) #数值
+FROM
+	imc_course
+WHERE
+	study_cnt = (SELECT MAX( study_cnt ) FROM imc_course ) #数值
+
+
+
+
+
+
+/*
+ORDER BY  对查询结果排序的最安全的方法   ASC升序  DCSC降序
+可以使用select子句中未出现的列或者是函数
+
+limit限制结果集的行数，常用于列表数据分页，前端分页，配合order by子句使用，为了保证每次获取到的数据按照同样的列排序
+limit 起始偏移量和行数    每页pageSize条，第currentPage页 （起始偏移量：(currentPage-1)*pageSize,行数：pageSize）
+
+*/
+
+
+SELECT
+	course_id,
+	title 
+FROM
+	imc_course 
+ORDER BY
+	study_cnt DESC 
+LIMIT 0,10     #(currentPage-1)*pageSize,pageSize   如果最后一页没有10行，就会返回实际行数
+
+
+
+
+
+
+-- ---------------------------------------------------/SELECT----------------------------------------------
+
+
+
+
+-- ----------------------------------------------------删除/更新---------------------------------------------
+
+/*
+DELETE 
+FROM table_name
+[where]
+[order by]
+[limit](这里只写一个参数）
+*/
+
+SELECT 
+*
+FROM
+	imc_course a
+	LEFT JOIN imc_chapter b ON a.course_id = b.course_id
+WHERE b.course_id IS NULL
+
+
+DELETE  a
+FROM  imc_course a
+	LEFT JOIN imc_chapter b ON a.course_id = b.course_id
+WHERE b.course_id IS NULL
+
+
+
+DELETE a 
+FROM
+	imc_type a
+	JOIN (
+SELECT
+	type_name,
+	MIN( type_id ) AS min_type_id,
+	count( * ) 
+FROM
+	imc_type 
+GROUP BY
+	type_name 
+HAVING
+	count( * ) > 1 
+	) b ON a.type_name = b.type_name 	AND a.type_id > min_type_id;
+	
+
+
+
+
+
+
+
+/*
+
+删除
+
+*/
 
 
 
@@ -483,6 +618,53 @@ HAVING
 
 
 
+-- ----------------------------------------------------/删除/更新---------------------------------------------
 
 
--- ---------------------------------------------------SELECT----------------------------------------------
+
+
+
+-- ----------------------------------------------------创建视图---------------------------------------------
+
+/*创建视图：视图是一种虚拟存在的表，
+使用视图的用户完全不需要关系后面对应的表结构、关联条件和筛选条件，对用户来说已经是过滤好的符合条件的结果集。
+一旦视图的结构确定了，可以屏蔽表结构变化对用户的影响，
+源表增加列对视图没有影响；源表修改列名，则可以通过修改视图来解决，不会造成对访问者的影响。
+视图不是表，不保存数据，只是一张虚拟的表，源表的数据发生变化后，视图的结果也同步发生变化。
+ 一般情况下，在创建有条件限制的视图时，加上“WITH CHECK OPTION”命令。
+ 重用SQL语句,简化复杂的sql操作,不必知道它的查询细节;保护数据,提高安全性;
+show tables 查看视图
+drop view 视图名称 删除视图
+视图的修改:
+     alter view 视图名
+      as
+      查询语句
+*/
+
+CREATE VIEW   view_name
+AS
+
+
+
+SELECT
+FROM
+WHERE
+
+
+CREATE VIEW vm_course AS SELECT
+a.course_id,
+a.title,
+b.class_name,
+c.type_name,
+d.level_name 
+FROM
+	imc_course a
+	JOIN imc_class b ON a.class_id = b.class_id
+	JOIN imc_type c ON c.type_id = a.type_id
+	JOIN imc_level d ON d.level_id = a.level_id
+
+
+SELECT * FROM vm_course;
+
+
+-- ----------------------------------------------------/创建视图---------------------------------------------
