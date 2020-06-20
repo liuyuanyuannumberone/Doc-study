@@ -36,6 +36,9 @@ decimal(10,2)中“2”表示小数部分的位数，如果插入的值未指定小数部分或者小数部分不
 若插入的值小数部分超过了2为则会发生截断，截取前2位小数。
 */
 
+
+
+
 INSERT INTO `imc_course` VALUES
 (1,'MySQL课程-79889','通过学习MySQL课程-79889让你更有成就感!',4,8,1,'2019-01-18 23:47:33',3503,'00:00:00','','','',29,'',0.0,0.0,0.0,0.0),
 (2,'MySQL课程-69546','通过学习MySQL课程-69546让你更有成就感!',6,7,2,'2018-08-31 00:09:44',3921,'00:00:00','','','',26,'',0.0,0.0,0.0,0.0),
@@ -50,6 +53,7 @@ INSERT INTO `imc_course` VALUES
 
 
 
+ALTER TABLE imc_course ADD is_recommand TINYINT NOT NULL DEFAULT 0 COMMENT '是否推荐，0不推荐，1推荐';
 
 
 
@@ -574,6 +578,7 @@ FROM
 WHERE b.course_id IS NULL
 
 
+
 DELETE  a
 FROM  imc_course a
 	LEFT JOIN imc_chapter b ON a.course_id = b.course_id
@@ -601,21 +606,41 @@ HAVING
 
 
 
-
-
-
 /*
-
-删除
-
+更新
 */
 
 
+UPDATE imc_user 
+SET user_status = 0 
+WHERE
+	user_nick = '侯鹿焦'
+
+
+UPDATE 	imc_course
+SET is_recommand=1
+ORDER BY
+	RAND( ) 
+LIMIT 10
 
 
 
 
-
+UPDATE imc_course a
+JOIN (
+SELECT
+	course_id,
+	AVG( content_score ) AS avg_content,
+	AVG( level_score ) AS avg_level,
+	AVG( logic_score ) AS avg_logic 
+FROM
+	imc_classvalue 
+GROUP BY
+	course_id 
+	) b ON a.course_id = b.course_id 
+	SET a.content_score = b.avg_content,
+	a.level_score = b.avg_level,
+	a.logic_score = b.avg_logic
 
 
 -- ----------------------------------------------------/删除/更新---------------------------------------------
@@ -668,3 +693,292 @@ SELECT * FROM vm_course;
 
 
 -- ----------------------------------------------------/创建视图---------------------------------------------
+
+
+-- --------------------------------------------------其他函数------------------------------------------------
+
+SELECT VERSION();
+
+-- ------------------------------------------------时间函数---------------------------------------------------
+SELECT
+	CURDATE( ), #2020-06-20
+	CURTIME( ), #09:13:03
+	NOW( ); # 2020-06-20 09:13:03
+  DATE_FORMAT (date,fmt) # 按照fmt格式，对date进行格式化 %Y(四位的年) %m（00-12） %d（00-31）  %H （00-24） %i（00-59） %s（00-50）
+  
+SELECT   DATE_FORMAT(now(),'%Y年%m月%d日 %H:%i:%s')  AS time;
+
+
+
+# SEC_TO_TIME(seconds) #把秒数转化为(小时:分:秒)
+# TIME_TO_SEC(time) #把(小时:分:秒)转化为秒数
+
+
+SELECT SEC_TO_TIME(3600) #01:00:00
+SELECT TIME_TO_SEC('00:01:00')  # 60
+
+
+SELECT
+	title,
+	DATEDIFF(now(), online_time )  AS   diff_time         #返回两个日期之间相差的天数
+FROM
+	imc_course;
+	
+
+/* 
+minutes
+DATE_ADD(date,INTERVAL YEAR|DAY|HOUR|MINUTES|SECOND) 给定的日期增加或者减少指定的时间单元
+*/ 
+
+SELECT
+	NOW( ),
+	DATE_ADD( NOW( ), INTERVAL 1 DAY );    #当前时间增加一天
+	DATE_ADD( NOW( ), INTERVAL -1 DAY );    #当前时间减少一天
+	DATE_ADD( NOW( ), INTERVAL '-1:30' HOUR_MINUTE );    #当前时间减少1小时30分
+
+/*
+EXTRACT(unit from date) 返回日期date的指定部分
+*/
+
+SELECT
+	NOW( ),
+	EXTRACT(YEAR FROM NOW())  #提取时间年份
+	
+	
+/*
+时间戳
+
+TIMESTAMP   CURRENT_TIMESTAMP    
+
+UNIX_TIMESTAMP() #unix时间戳，返回的是秒数
+
+*/
+
+SELECT
+	NOW( ),
+	UNIX_TIMESTAMP()  #1592632749
+	
+-- ------------------------------------------------/时间函数---------------------------------------------------
+
+
+
+-- ------------------------------------------------字符串函数---------------------------------------------------
+/*
+
+
+*/
+
+SELECT
+	CONCAT( class_name, title ),                              #字符串连接
+	CONCAT_WS( '----------------', class_name, title ) AS ws, #字符串用分割符连接
+	CHAR_LENGTH( class_name ) AS zifu,                        #返回字符个数
+	LENGTH( class_name ) AS tyte,                             #返回字节个数
+	class_name
+FROM
+	imc_course a
+	JOIN imc_class b ON a.class_id = b.class_id
+
+#    #,###,###.##            1,232,234.00
+SELECT  FORMAT(12345.7,2)  # 保留4位小数 12,345.70
+
+
+/*
+
+字符串截取函数
+
+*/
+
+SELECT 
+  LEFT	( 'hello,word', 5 ),# hello
+	RIGHT ( 'hello,word', 5 ),# .word
+	SUBSTRING( 'hello,word', 2 ),# ello,word
+	SUBSTRING( 'hello,word', 2, 4 ),# ello
+	SUBSTRING_INDEX( '192.168.22.153', '.', 3 ),# 192.168.22  str按.分割的前3个字符串
+	SUBSTRING_INDEX( '192.168.22.153', '.', - 3 ), # 168.22.153  str按.分割的后3个字符串
+	LOCATE('h','ehllo world,hello')  #2  返回某个字符串第一次出现的位置
+	TRIM(' hello word '),  #去掉字符串左右两边的空格
+  TRIM('h' FROM 'helloworld') # 删除字符串
+
+
+
+SELECT
+	title,
+	LOCATE( '-', title ),
+	SUBSTRING( title, 1, LOCATE( '-', title ) - 1 ),
+	SUBSTRING_INDEX( title, '-', 1 ) 
+FROM
+	imc_course
+-- ------------------------------------------------/字符串函数---------------------------------------------------
+
+SELECT ROUND(122.456,2)   # 122.46 对数值四舍五入保留2位小数
+SELECT RAND()    # 返回0-1之间的随机数 
+SELECT MD5('323232323')  #加密
+
+
+SELECT
+	user_nick,
+	sex,
+CASE
+	WHEN sex = 1 THEN '男' 
+	WHEN sex = 0 THEN '女' 
+	ELSE '未知' 
+	END   AS '性别' 
+FROM
+	imc_user 
+WHERE
+CASE	
+		WHEN sex = 1 THEN  '男' 
+		WHEN sex = 0 THEN '女'
+		ELSE '未知' 
+END = '男'
+
+-- --------------------------------------------------/其他函数------------------------------------------------
+
+
+-- ---------------------------------------------------公共表--------表达式（CTE）----------------------------------------------
+/*
+MySQL 8.0之后才使用的版本
+
+CTE生成一个命名临时表，并且只在查询期间有效;
+CTE临时表在一个查询中可以多次引用以及自引用;
+*/
+
+WITH cte AS ( SELECT title, study_cnt, class_id FROM imc_course WHERE study_cnt > 2000 ) 
+SELECT  *  FROM   cte
+
+
+
+-- CTE递归生成序列
+WITH RECURSIVE test  AS ( SELECT 1 AS n UNION ALL SELECT 1+n FROM  test WHERE  n<10)
+SELECT * FROM test 
+
+
+WITH RECURSIVE replay ( quest_id, quest_title, user_id, replyid, path ) AS (
+SELECT
+	quest_id,
+	quest_title,
+	user_id,
+	replyid,
+	CAST( quest_id AS CHAR ( 200 ) ) AS path # 字段名 -转换的类型
+FROM
+	imc_question
+WHERE
+	course_id = 59 AND replyid = 0 
+UNION ALL
+SELECT
+  a.quest_id,
+	a.quest_title,
+	a.user_id,
+	a.replyid,
+	CONCAT(b.path,'>>',a.quest_id) AS path
+FROM
+	imc_question a
+	JOIN  replay b ON a.replyid = b.quest_id 
+	)	
+	SELECT * FROM replay
+
+-- ---------------------------------------------------/公共表------------表达式(CTE)----------------------------------------------
+
+-- ---------------------------------------------------窗口函数----------------------------------------------
+/*
+
+聚合函数都可以作为窗口函数使用。
+ROW_NUMBER() 返回窗口分区内数据的行数（！！！！第几行）
+RANK() 类似row_number  只是对于相同的数据产生重复的行号，之后的数据行号会产生间隔
+DENSE_RANK() L类似于rank，当组内某行数据重复时，虽然行号会重复，但后续的行号不会产生间隔
+*/
+
+
+WITH test (study_name,class_name,score) AS (
+SELECT 'tom','mysql','98' 
+UNION ALL
+SELECT 'jrm','mysql','98' 
+UNION ALL
+SELECT 'jss','mysql','98' 
+UNION ALL
+SELECT 'jerry','mysql','58' 
+UNION ALL
+SELECT 'moimi','redis','48' 
+UNION ALL
+SELECT 'ghh','redis','18' 
+UNION ALL
+SELECT 'mike','redis','98' 
+UNION ALL
+SELECT 'srri','redis','68' 
+)
+#partition子句：窗口按照那些字段进行分组，窗口函数在不同的分组上分别执行。
+SELECT  study_name,class_name, score,
+ROW_NUMBER() OVER(PARTITION BY class_name ORDER BY score DESC)  AS rw,
+RANK() OVER(PARTITION BY class_name ORDER BY score DESC)  AS rk,
+DENSE_RANK() OVER(PARTITION BY class_name ORDER BY score DESC)  AS dr
+FROM test
+# ORDER BY class_name,rw
+
+
+WITH temp AS(
+SELECT
+	class_name,
+	study_cnt,
+	title,
+	score,
+	RANK ( ) OVER ( PARTITION BY class_name ORDER BY score DESC ) AS rk 
+FROM
+	imc_course a
+	JOIN imc_class b ON a.class_id = b.class_id
+)
+SELECT * FROM temp
+WHERE rk<=3
+
+
+
+WITH temp  AS(
+SELECT
+	class_name,
+	study_cnt,
+	title,
+  SUM(study_cnt) OVER (PARTITION BY class_name ) AS class_total
+FROM
+	imc_course a
+	JOIN imc_class b ON a.class_id = b.class_id
+)
+SELECT class_name,title,CONCAT(study_cnt/class_total*100,'%') AS ratio FROM temp
+
+
+-- ---------------------------------------------------/窗口函数----------------------------------------------
+
+
+-- ----------------------------------------------------误区----------------------------------------------------
+#在sql开发中容易犯的错误
+
+-- 1、使用count(*) 判断是否存在符合条件的数据，他会扫描表中所有的数据，请使用 SELECT ... LIMIT 1
+-- 2、在执行一个更新语句后，使用查询方式判断更新语句是否执行成功，delete和update后使用ROW_COUNT()判断修改行数
+-- 3、在ON条件中过滤不满足条件的记录。（使用where准确）
+
+SELECT
+	b.class_name,
+	a.title,
+	b.class_id
+FROM
+	imc_course a
+	JOIN imc_class b ON a.class_id = b.class_id 
+# AND a.class_id = 5   #left join 返回结果错误
+  WHERE  a.class_id = 5
+ 
+-- 4、在使用in进行子查询的判断时，在列中未指定正确的表名，所以只当最好的办法关联代替子查询.
+SELECT A1 FROM	A  WHERE A1 IN  (SELECT A1 FROM B),#这时尽管B中不存在A1列，数据库也不会报错，而是会列出A表中所有的数据。错误的
+# B.A1  正确
+
+SELECT title FROM imc_course WHERE title  IN (SELECT imc_class.title FROM imc_class); # 正确的
+SELECT title FROM imc_course WHERE course_id IN (1,3,5);  #列的值在指定范围内的数据  NOT IN 
+--  最好的办法关联代替子查询
+
+SELECT a.title FROM imc_course a
+JOIN imc_class b ON a.class_id=b.class_id
+
+-- 5、对于表中定义的具有NOT NULL 和default值的列，在插入数据时直接插入NULL，不要这么做。
+-- 6、使用CTE表达式代替子查询
+-- 7、拆分复杂的大sql为多个简单的小sql
+
+
+
+-- ----------------------------------------------------/误区----------------------------------------------------
