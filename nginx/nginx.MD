@@ -6,6 +6,17 @@
 
 2、systemctl   disable   firewalld.service 禁止开机自启动防火墙    关闭selinux
 
+```linux
+systemctl list-unit-files    //查看所有可用单元（disable||active）
+yum list
+rpm -qa  列出所有安装过的包
+   -ivh 显示安装进度  
+   -ivh --test 用来检查依赖关系，并不是真正安装。
+   -ql  安装详情
+
+
+```
+
 3、yum -y install gcc gcc-c++ autoconf  pcre pcre-devel make automake
 
 4、yum -y install wget httpd-tools vim
@@ -20,9 +31,7 @@
 
 #### 二、基础学习
 
-  1、/etc/nginx/nginx.conf       /usr/sbin/nginx             /usr/share/nginx/html
-
-  2、rpm -ql nginx      
+  1、/etc/nginx/nginx.conf       /usr/sbin/nginx             /usr/share/nginx/html    
 
   4、**主配置文件**                                           **cgi配置相关**
 
@@ -86,11 +95,9 @@
 
   nginx -t  语法正确检测   -s   reload         、
 
- nginx  -t -c /etc/nginx/nginc.conf     
+  nginx  -t -c /etc/nginx/nginc.conf     
 
   nginx -s reload -c  /etc/nginx/nginx.conf
-
-
 
  6、ip a 查看网卡 ，网卡绑定的ip    ifconfig
 
