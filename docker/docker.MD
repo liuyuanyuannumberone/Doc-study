@@ -75,8 +75,8 @@ docker history  c0223d490d03    # 该命令用于显示镜像的历史，查看�
                        # 查看docker镜像构建过程 还原dockerfile 
 docker run hello-demon:first-version   # 运行docker images  需要仓库名+标签
 docker run  c0223d490d03           # 运行docker images  需要镜像id
-docker run -d --name=flask  liuyuanyuandedocker/flask-demo  # 后台运行,指定容器名字
-docker  rmi  -f                #镜像id（区分即可） 删除镜像
+docker run -d  --name=flask   liuyuanyuandedocker/flask-demo  # 后台运行,指定容器名字
+docker  rmi  -f                 #镜像id（区分即可） 删除镜像
 一般先删除有关容器记录，才可以删除对应的镜像
 :Error response from daemon: conflict: unable to remove repository reference "lyy/hello:latest" (must force) - container a3ad0c9b4db5 is using its referenced image 821a42dd9ddb
 ```
@@ -97,7 +97,7 @@ docker run -it centos         #交互式式的伪终端运行镜像
 docker start/stop/restart 容器id/names  # 启动（已被停止）的容器/
 docker exec -it 5df2d489b17c  /bin/bash  # docker exec 在运行的容器中执行命令
 docker exec -it 5df2d489b17c  ip a    python ................................
-docker search ubu ntu              # Docker Hub 网站来搜索镜像
+docker search ubuntu              # Docker Hub 网站来搜索镜像
 ```
 
 #####  3.Dockerfile
