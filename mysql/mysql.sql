@@ -52,7 +52,7 @@ INSERT INTO `imc_course` VALUES
 (10,'MySQL课程-84741','通过学习MySQL课程-84741让你更有成就感!',1,5,2,'2018-05-25 04:24:47',1334,'00:00:00','','','',23,'',0.0,0.0,0.0,0.0);
 
 
-
+# 修改表结构
 ALTER TABLE imc_course ADD is_recommand TINYINT NOT NULL DEFAULT 0 COMMENT '是否推荐，0不推荐，1推荐';
 
 
@@ -409,6 +409,23 @@ SELECT title,study_cnt FROM imc_course WHERE title LIKE '%mysql%' XOR study_cnt>
 JOIN
 INNER JOIN 内关联（A&&B）     select <select list>  from  tableA A INNER JOIN tableB B   ON A.key=B.key;  (两个表的集合)
 OUTER JOIN 外关联   LEFT  JOIN (左连接)  和  RIGHT JOIN（右连接）
+
+
+A交B：inner join
+
+A+A交B：A left join B
+
+B+A交B：A right join B
+
+A-A交B：A left join加上where条件B.key is null
+
+B-A交B：A right join加上where条件A.key is null
+
+A+B：A full join B on A.key=B.key
+
+A+B-A交B：A full join B on A.key=B.key where A.key is null or B.key is null
+
+
 */
 -- 查询每一门课程的课程ID、课程名称和章节名称
 SELECT
@@ -419,7 +436,7 @@ FROM                                                   -- A&&B
 	imc_course a
 	JOIN imc_chapter b ON a.course_id = b.course_id;
 
-
+# 是指以左边的表的数据为基准，去匹配右边的表的数据，如果匹配到就显示，匹配不到就显示为null
 SELECT
 	a.course_id,
 	a.title,
@@ -432,10 +449,10 @@ LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id;
 SELECT
 	a.course_id,
 	a.title,
-	b.chapter_name                                    -- (A-A&&B)
+	b.chapter_name                                    -- (A-A&&B) where再筛选了一次
 FROM
 	imc_course a
-LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id WHERE b.KEY IS NULL;
+LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id   WHERE b.chapter_no IS NULL;
 
 
 
