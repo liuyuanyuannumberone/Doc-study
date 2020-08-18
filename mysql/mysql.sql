@@ -319,15 +319,12 @@ create table bak.imc_class2020901 like imc_class      insert into  bak.imc_class
 
 
 /*
-主键约束（唯一不能为null）：  ALTER TABLE imc_course ADD is_recommand TINYINT NOT NULL DEFAULT 0 COMMENT '是否推荐，0不推荐，1推荐';
+普通索引： CREATE UNIQUE INDEX uqx_classname  ON  imc_class (class_name);
+唯一索引（主键） 唯一约束（UNIQUE)(唯一可以有null) 主键约束（唯一不能为null）：
+
+ALTER TABLE imc_course ADD is_recommand TINYINT NOT NULL DEFAULT 0 COMMENT '是否推荐，0不推荐，1推荐';
 AUTO_INCREMENT  自动增长    插入数据时这个为null即可，数据库会自动增长     insert into student  values(null,'张三')
-
-
-唯一约束（UNIQUE)(唯一可以有null)
-索引  CREATE UNIQUE INDEX uqx_classname  ON  imc_class (class_name);
-
 非空约束  NOT NULL DEFAULT   插入数据时，默认值为default    insert into student  values(null,'张三'，default)
-
 外键约束： constraint  [外键约束名称] foreign key(外键名) references 主表名(主表某字段名)
 
 
@@ -338,13 +335,13 @@ AUTO_INCREMENT  自动增长    插入数据时这个为null即可，数据库会自动增长     inser
 多表关系；
 
 一 对多： 一个用户下多个订单，一个订单只属于一个用户   （主表 从表（外键：与主表关联的键））
-          
+
 
 多对多：一个订单有多个商品，一个商品出现在不同的订单。   最好解决办法需要加表订单商品关系表
         一个学生选多个课程，一个课程出现在多个学生中。
 */
 
- 
+
 
 -- ---------------------------------------------- SELECT------------------------------------------------
 # SELECT 执行顺序
@@ -516,30 +513,30 @@ WHERE
 
 
 
+/*
+子查询：
+结果是单列/多列
 
+*/
 
 /*
-多个表中查询数据--关联查询
+联合查询 UNION
+多表查询--关联查询
 JOIN
-INNER JOIN 内关联（A&&B）     select <select list>  from  tableA A INNER JOIN tableB B   ON A.key=B.key;  (两个表的集合)
-OUTER JOIN 外关联   LEFT  JOIN (左连接)  和  RIGHT JOIN（右连接）
+INNER JOIN 内关联（A&&B）
+     select <select list>  from  tableA A  INNER JOIN tableB B   ON A.key=B.key;  显式内连接
+     select <select list>  from  tableA A ,tableB B  WHERE A.key=B.key;        隐式内连接
 
+OUTER JOIN 外关联   LEFT  JOIN (左连接)  和  RIGHT JOIN（右连接）
+# 是指以左边的表的数据为基准，去匹配右边的表的数据，如果匹配到就显示，匹配不到就显示为null   左连接
 
 A交B：inner join
-
 A+A交B：A left join B
-
 B+A交B：A right join B
-
 A-A交B：A left join加上where条件B.key is null
-
 B-A交B：A right join加上where条件A.key is null
-
 A+B：A full join B on A.key=B.key
-
 A+B-A交B：A full join B on A.key=B.key where A.key is null or B.key is null
-
-
 */
 -- 查询每一门课程的课程ID、课程名称和章节名称
 SELECT
@@ -550,7 +547,7 @@ FROM                                                   -- A&&B
 	imc_course a
 	JOIN imc_chapter b ON a.course_id = b.course_id;
 
-# 是指以左边的表的数据为基准，去匹配右边的表的数据，如果匹配到就显示，匹配不到就显示为null
+
 SELECT
 	a.course_id,
 	a.title,
@@ -569,14 +566,7 @@ FROM
 LEFT 	JOIN imc_chapter b ON a.course_id = b.course_id   WHERE b.chapter_no IS NULL;
 
 
-
-
-
-
-
-
 -- ---------------------------------------------------/SELECT----------------------------------------------
-
 
 
 
@@ -590,23 +580,16 @@ FROM table_name
 [limit](这里只写一个参数）
 */
 
-SELECT
-*
-FROM
-	imc_course a
-	LEFT JOIN imc_chapter b ON a.course_id = b.course_id
-WHERE b.course_id IS NULL
 
 
-
-DELETE  a
+DELETE  
 FROM  imc_course a
 	LEFT JOIN imc_chapter b ON a.course_id = b.course_id
 WHERE b.course_id IS NULL
 
 
 
-DELETE a
+DELETE 
 FROM
 	imc_type a
 	JOIN (
